@@ -1,8 +1,10 @@
-// ignore_for_file: file_names, prefer_const_constructors, avoid_print, library_private_types_in_public_api
+// ignore_for_file: file_names, prefer_const_constructors, avoid_print, library_private_types_in_public_api, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:time_picker_spinner/time_picker_spinner.dart';
 import 'package:flutter_application_arda/screens/showRoute.dart';
+import 'package:flutter_application_arda/widgets/fetch_categories.dart';
+import 'package:flutter_application_arda/widgets/multi_select_dropdown.dart';
 
 class GetUserData extends StatefulWidget {
   const GetUserData({super.key});
@@ -17,18 +19,26 @@ class _GetUserDataState extends State<GetUserData> {
   String? _selectedTransport; // Vesait seçimi
   String? _selectedCategory; // Kategori seçimi
   String? _selectedLocation; // Lokasyon seçimi
+  List<String> _categories = [];
+  List<String> _selectedCategories = []; // Seçili kategorileri tutan liste
+  bool _isLoading = true;
 
   final List<String> _transportOptions = ['Yaya', 'Araç'];
-  final List<String> _categoryOptions = [
-    'Kategori 1',
-    'Kategori 2',
-    'Kategori 3',
-    'Kategori 4',
-    'Kategori 5',
-    'Kategori 6',
-    'Kategori 7',
-  ];
   final List<String> _locationOptions = ['Şehir İçi', 'Şehir Dışı'];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    final categories = await CategoryService.fetchCategories();
+    setState(() {
+      _categories = categories;
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,101 +53,109 @@ class _GetUserDataState extends State<GetUserData> {
         iconTheme: IconThemeData(color: Colors.white),
       ),
       backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // 1. Seçim: Süre
-              Text('Süre',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 20),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // 1. Seçim: Süre
+                      Text('Süre',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 20),
 
-              // Zaman Picker
-              TimePickerSpinner(
-                locale: const Locale('en', ''),
-                time: dateTime,
-                is24HourMode: true, // 24 saat formatı
-                isShowSeconds: false, // Saniye gösterilmez
-                itemHeight: 60,
-                normalTextStyle:
-                    const TextStyle(fontSize: 24, color: Colors.grey),
-                highlightedTextStyle:
-                    const TextStyle(fontSize: 24, color: Colors.blue),
-                isForce2Digits: true,
-                onTimeChange: (time) {
-                  setState(() {
-                    dateTime = time; // Seçilen zamanı güncelle
-                  });
-                },
-              ),
+                      // Zaman Picker
+                      TimePickerSpinner(
+                        locale: const Locale('en', ''),
+                        time: dateTime,
+                        is24HourMode: true, // 24 saat formatı
+                        isShowSeconds: false, // Saniye gösterilmez
+                        itemHeight: 60,
+                        normalTextStyle:
+                            const TextStyle(fontSize: 24, color: Colors.grey),
+                        highlightedTextStyle:
+                            const TextStyle(fontSize: 24, color: Colors.blue),
+                        isForce2Digits: true,
+                        onTimeChange: (time) {
+                          setState(() {
+                            dateTime = time; // Seçilen zamanı güncelle
+                          });
+                        },
+                      ),
 
-              SizedBox(height: 20),
+                      SizedBox(height: 20),
 
-              // 2. Seçim: Vesait
-              _buildDropdown(
-                hintText: 'Vesait Seçin',
-                value: _selectedTransport,
-                items: _transportOptions,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedTransport = newValue;
-                  });
-                },
-              ),
+                      // 2. Seçim: Vesait
+                      _buildDropdown(
+                        hintText: 'Vesait Seçin',
+                        value: _selectedTransport,
+                        items: _transportOptions,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedTransport = newValue;
+                          });
+                        },
+                      ),
 
-              // 3. Seçim: Kategori
-              _buildDropdown(
-                hintText: 'Kategori Seçin',
-                value: _selectedCategory,
-                items: _categoryOptions,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedCategory = newValue;
-                  });
-                },
-              ),
+                      // 3. Seçim: Kategori
+                      MultiSelectDropdown(
+                        items: _categories,
+                        selectedItems: _selectedCategories,
+                        onSelectionChanged: (selectedItems) {
+                          setState(() {
+                            _selectedCategories =
+                                selectedItems; // Seçimleri güncelle
+                          });
+                        },
+                      ),
 
-              // 4. Seçim: Lokasyon
-              _buildDropdown(
-                hintText: 'Lokasyon Seçin',
-                value: _selectedLocation,
-                items: _locationOptions,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedLocation = newValue;
-                  });
-                },
-              ),
+                      // 4. Seçim: Lokasyon
+                      _buildDropdown(
+                        hintText: 'Lokasyon Seçin',
+                        value: _selectedLocation,
+                        items: _locationOptions,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedLocation = newValue;
+                          });
+                        },
+                      ),
 
-              SizedBox(height: 20),
+                      SizedBox(height: 20),
 
-              // Rota Oluştur Butonu
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ShowRoute()));
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.green, // Butonun yazı rengi
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 100, vertical: 10), // İç boşluklar
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(15), // Yuvarlatılmış kenarlar
+                      // Rota Oluştur Butonu
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ShowRoute()));
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.green, // Butonun yazı rengi
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 100, vertical: 10), // İç boşluklar
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                15), // Yuvarlatılmış kenarlar
+                          ),
+                        ),
+                        child: Text(
+                          'Rota Oluştur',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Text(
-                  'Rota Oluştur',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 

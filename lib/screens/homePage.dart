@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_arda/weatherWidget.dart';
+import 'package:flutter_application_arda/widgets/weatherWidget.dart';
 import 'getUserData.dart';
 
 class HomePage extends StatelessWidget {
@@ -59,7 +59,6 @@ class HomePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   children: [
-                    
                     WeatherWidget()
                     //Text('Hava durumu widget'),
                     //Text('UVA bilgileri'),

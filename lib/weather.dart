@@ -13,3 +13,4 @@ Future<Map<String, dynamic>> fetchWeather(String city) async {
     throw Exception('Failed to load weather data');
   }
 }
+//https://api.openweathermap.org/data/2.5/weather?q=Istanbul&appid=c28cdd638b9452f9220d20d2949e13d3&units=metric
