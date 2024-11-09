@@ -54,7 +54,20 @@ class _ShowRouteState extends State<ShowRoute> {
                   MaterialPageRoute(builder: (context) => MapPage()),
                 );
               },
-              child: Text('Harita Sayfasına Git'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.green, // Butonun yazı rengi
+                padding: EdgeInsets.symmetric(
+                    horizontal: 100, vertical: 10), // İç boşluklar
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(15), // Yuvarlatılmış kenarlar
+                ),
+              ),
+              child: Text(
+                'Harita Sayfasına Git',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           Expanded(

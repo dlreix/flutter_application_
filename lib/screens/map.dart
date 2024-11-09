@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -25,8 +25,8 @@ class _MapPageState extends State<MapPage> {
 
   // Sunucudan koordinatları almak için HTTP isteği
   Future<void> _fetchCoordinates() async {
-    final response = await http.get(Uri.parse(
-        'https://213.238.1680.86:1603/api/generate_route?route=bilmemne'));
+    final response =
+        await http.get(Uri.parse('https://api.example.com/coordinates'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -67,6 +67,9 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Map Page'),
+      ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
