@@ -16,10 +16,10 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   // Ekranlar listesi
-  static const List<Widget> _widgetOptions = <Widget>[
+  /*static const List<Widget> _widgetOptions = <Widget>[
     HomePage(), // Ana sayfa
     MapPage(),
-  ];
+  ];*/
 
   void _onItemTapped(int index) {
     setState(() {

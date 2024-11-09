@@ -6,7 +6,7 @@ import 'package:flutter_application_arda/screens/showRoute.dart';
 import 'package:flutter_application_arda/widgets/fetch_categories.dart';
 import 'package:flutter_application_arda/widgets/multi_select_dropdown.dart';
 import 'package:flutter_application_arda/widgets/custom_dropdown.dart';
-import 'package:flutter_application_arda/widgets/send_data_to_server.dart';
+import 'package:flutter_application_arda/widgets/send_cat_to_server.dart';
 
 class GetUserData extends StatefulWidget {
   const GetUserData({Key? key}) : super(key: key);
