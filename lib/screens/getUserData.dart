@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, avoid_print, library_private_types_in_public_api, unused_field
+// ignore_for_file: file_names, prefer_const_constructors, avoid_print, library_private_types_in_public_api, unused_field, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:time_picker_spinner/time_picker_spinner.dart';
@@ -39,6 +39,26 @@ class _GetUserDataState extends State<GetUserData> {
       _categories = categories;
       _isLoading = false;
     });
+  }
+
+  void _showPermissionErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Konum İzni'),
+          content: const Text('Konum izni verilmedi. Lütfen izin verin.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Tamam'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -147,23 +167,8 @@ class _GetUserDataState extends State<GetUserData> {
                       ElevatedButton(
                         onPressed: () {
                           sendDataToServer(
-                            dateTime: dateTime,
-                            selectedTransport: _selectedTransport,
                             selectedCategories: _selectedCategories,
-                            selectedLocation: _selectedLocation,
                           );
-                          print('Seçilen Zaman: ${dateTime.toString()}');
-                          print('zaman type: ${dateTime.runtimeType}');
-                          print('Seçilen Vesait: $_selectedTransport');
-                          print(
-                              'vesait type: ${_selectedTransport.runtimeType}');
-                          print(
-                              'Seçilen Kategoriler: ${_selectedCategories.join(', ')}');
-                          print(
-                              'kategori type: ${_selectedCategories.runtimeType}');
-                          print('Seçilen Lokasyon: $_selectedLocation');
-                          print(
-                              'Lokasyon type: ${_selectedLocation.runtimeType}');
 
                           Navigator.push(
                             context,

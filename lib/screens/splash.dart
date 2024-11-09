@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_arda/screens/homePage.dart';
 
@@ -23,14 +25,41 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: const BoxDecoration(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
           image: DecorationImage(
-        image: AssetImage('assets/images/optiRoute.png'),
-        fit: BoxFit.cover,
-      )),
-    ));
+            image: AssetImage('assets/images/optiRoute.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(
+                bottom:
+                    100), // Sayfanın 3'te 2'lik alt kısmında olmasını sağlar
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Text(
+                  'metin1',
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors
+                          .white), // İstediğiniz stil özelliklerini ekleyebilirsiniz
+                ),
+                SizedBox(height: 20), // 20 px boşluk
+                Text(
+                  'metin2',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

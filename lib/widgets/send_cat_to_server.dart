@@ -1,21 +1,28 @@
+// ignore_for_file: avoid_print
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:math';
 
 Future<void> sendDataToServer({
-  required DateTime dateTime,
-  required String? selectedTransport,
   required List<String> selectedCategories,
-  required String? selectedLocation,
 }) async {
   // Sunucuya gönderilecek URL
   final url = Uri.parse('http://routeplanner.ardayasar.com/api/generate_route');
 
-  // Verilerinizi JSON formatında hazırlayın
-  final Map<String, dynamic> data = {
-    'time': dateTime.toIso8601String(), // Zamanı ISO formatında gönder
-    'transport': selectedTransport,
-    'categories': selectedCategories,
-    'location': selectedLocation,
+  if (selectedCategories.isEmpty) {
+    print('Gönderilecek kategori bulunamadı');
+    return;
+  }
+
+  // Rastgele bir kategori seçin
+  final random = Random();
+  final String randomCategory =
+      selectedCategories[random.nextInt(selectedCategories.length)];
+
+  // Veriyi istenen formatta hazırlayın
+  final Map<String, String> data = {
+    'category': randomCategory,
   };
 
   try {
@@ -28,7 +35,7 @@ Future<void> sendDataToServer({
 
     if (response.statusCode == 200) {
       // Başarılı istek
-      print('Veriler başarıyla gönderildi');
+      print('Veri başarıyla gönderildi');
     } else {
       // Hata durumu
       print('Hata oluştu: ${response.statusCode}');

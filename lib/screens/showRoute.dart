@@ -1,105 +1,89 @@
-// ignore_for_file: file_names, prefer_const_constructors, avoid_print, dead_code
+// ignore_for_file: file_names, prefer_const_constructors, avoid_print, dead_code, use_key_in_widget_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_application_arda/screens/map.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ShowRoute extends StatelessWidget {
-  ShowRoute({super.key});
+class ShowRoute extends StatefulWidget {
+  @override
+  _ShowRouteState createState() => _ShowRouteState();
+}
 
-  final List<Map<String, String>> stops = [
-    {'name': 'Durak 1', 'duration': '20 dakika'},
-    {'name': 'Durak 2', 'duration': '15 dakika'},
-    {'name': 'Durak 3', 'duration': '30 dakika'},
-    {'name': 'Durak 4', 'duration': '25 dakika'},
-  ];
+class _ShowRouteState extends State<ShowRoute> {
+  List<dynamic> dataList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final url = Uri.parse(
+        'http://routeplanner.ardayasar.com/api/get_data'); // Örnek URL
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          dataList = json.decode(response.body);
+        });
+      } else {
+        print('Hata: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Bir hata oluştu: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Devam Eden Gezi',
-          style: TextStyle(color: Colors.white, fontSize: 16),
-        ),
-        backgroundColor: const Color.fromARGB(255, 11, 49, 115),
-        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Rota Gösterimi'),
       ),
-      backgroundColor: const Color.fromARGB(255, 240, 240, 240),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
               onPressed: () {
+                // Harita sayfasına yönlendirme
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MapPage()),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: EdgeInsets.symmetric(vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Text(
-                'Haritada Göster',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Text('Harita Sayfasına Git'),
             ),
-            SizedBox(height: 20),
-
-            // Rota Adım Adım Gösterim
-            Expanded(
-              child: ListView.builder(
-                itemCount: stops.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          if (index != stops.length - 1)
-                            Container(
-                                width: 2, height: 60, color: Colors.black),
-                        ],
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              stops[index]['name']!,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Önerilen süre: ${stops[index]['duration']}',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.grey),
-                            ),
-                            SizedBox(height: 20),
-                          ],
+          ),
+          Expanded(
+            child: dataList.isEmpty
+                ? Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: dataList.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        margin: EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+                        elevation: 5,
+                        child: ListTile(
+                          title: Text(
+                            dataList[index]['category'] ??
+                                'Kategori Bilinmiyor',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                              'Diğer bilgi: ${dataList[index]['details'] ?? 'Bilgi yok'}'),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
     );
   }
