@@ -56,7 +56,7 @@ class _ShowRouteState extends State<ShowRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Route Display'),
+        title: Text('Rota Gösterimi'),
       ),
       body: Column(
         children: [
@@ -78,7 +78,7 @@ class _ShowRouteState extends State<ShowRoute> {
                 ),
               ),
               child: Text(
-                'Go to Map Page',
+                'Harita Sayfasına Git',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
@@ -104,10 +104,8 @@ class _ShowRouteState extends State<ShowRoute> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Category: ${item['categorization'] ?? 'Unknown'}'),
-                              Text('Function: ${item['placeFunction'] ?? 'Unknown'}'),
-                              Text('Waiting Time: ${item['waitingTime'] ?? 'N/A'} mins'),
-                              Text('Transportation: ${item['transportation'] ?? 'N/A'}'),
+                              Text('Kategori: ${item['categorization'] ?? 'Unknown'}'),
+                              Text('Ortalama Süre: ${item['waitingTime'] ?? 'N/A'} mins'),
                             ],
                           ),
                         ),
