@@ -8,7 +8,7 @@ Future<void> sendDataToServer({
   required List<String> selectedCategories,
 }) async {
   // Sunucuya gönderilecek URL
-  final url = Uri.parse('http://routeplanner.ardayasar.com/api/generate_route');
+  final url = Uri.parse('http://213.238.180.86:1603/api/generate_route');
 
   if (selectedCategories.isEmpty) {
     print('Gönderilecek kategori bulunamadı');
@@ -36,6 +36,7 @@ Future<void> sendDataToServer({
     if (response.statusCode == 200) {
       // Başarılı istek
       print('Veri başarıyla gönderildi');
+      print(response.body);
     } else {
       // Hata durumu
       print('Hata oluştu: ${response.statusCode}');

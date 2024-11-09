@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_arda/screens/map.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:math';
 
 class ShowRoute extends StatefulWidget {
+  final List<String> selectedCategories;
+
+  ShowRoute({required this.selectedCategories});
+
   @override
   _ShowRouteState createState() => _ShowRouteState();
 }
@@ -19,20 +24,31 @@ class _ShowRouteState extends State<ShowRoute> {
   }
 
   Future<void> fetchData() async {
-    final url = Uri.parse(
-        'http://routeplanner.ardayasar.com/api/get_data'); // Örnek URL
+    if (widget.selectedCategories.isEmpty) {
+      print('No categories selected');
+      return;
+    }
 
+    // Select a random category
+    final randomCategory = widget.selectedCategories[Random().nextInt(widget.selectedCategories.length)];
+
+    final url = Uri.parse('http://213.238.180.86:1603/api/generate_route');
     try {
-      final response = await http.get(url);
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({"category": randomCategory}),
+      );
+
       if (response.statusCode == 200) {
         setState(() {
           dataList = json.decode(response.body);
         });
       } else {
-        print('Hata: ${response.statusCode}');
+        print('Error: ${response.statusCode}');
       }
     } catch (e) {
-      print('Bir hata oluştu: $e');
+      print('An error occurred: $e');
     }
   }
 
@@ -48,7 +64,6 @@ class _ShowRouteState extends State<ShowRoute> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
-                // Harita sayfasına yönlendirme
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MapPage()),
@@ -56,12 +71,10 @@ class _ShowRouteState extends State<ShowRoute> {
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.green, // Butonun yazı rengi
-                padding: EdgeInsets.symmetric(
-                    horizontal: 100, vertical: 10), // İç boşluklar
+                backgroundColor: Colors.green,
+                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 10),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(15), // Yuvarlatılmış kenarlar
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
               child: Text(
@@ -76,6 +89,7 @@ class _ShowRouteState extends State<ShowRoute> {
                 : ListView.builder(
                     itemCount: dataList.length,
                     itemBuilder: (context, index) {
+                      final item = dataList[index];
                       return Card(
                         margin: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(
@@ -84,13 +98,16 @@ class _ShowRouteState extends State<ShowRoute> {
                         elevation: 5,
                         child: ListTile(
                           title: Text(
-                            dataList[index]['category'] ??
-                                'Kategori Bilinmiyor',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                            item['placeName'] ?? 'Unknown Place',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          subtitle: Text(
-                              'Diğer bilgi: ${dataList[index]['details'] ?? 'Bilgi yok'}'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Kategori: ${item['categorization'] ?? 'Unknown'}'),
+                              Text('Ortalama Süre: ${item['waitingTime'] ?? 'N/A'} mins'),
+                            ],
+                          ),
                         ),
                       );
                     },

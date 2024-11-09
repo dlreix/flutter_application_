@@ -146,14 +146,10 @@ class _GetUserDataState extends State<GetUserData> {
                       // Rota Oluştur Butonu
                       ElevatedButton(
                         onPressed: () {
-                          sendDataToServer(
-                            selectedCategories: _selectedCategories,
-                          );
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ShowRoute(),
+                              builder: (context) => ShowRoute(selectedCategories: _selectedCategories),
                             ),
                           );
                         },
