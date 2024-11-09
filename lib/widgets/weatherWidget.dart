@@ -14,7 +14,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   void initState() {
     super.initState();
-    _weatherData = fetchWeather('Istanbul');
+    _weatherData = fetchWeather('Amasya');
   }
 
   @override
