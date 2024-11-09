@@ -25,8 +25,8 @@ class _MapPageState extends State<MapPage> {
 
   // Sunucudan koordinatları almak için HTTP isteği
   Future<void> _fetchCoordinates() async {
-    final response =
-        await http.get(Uri.parse('https://api.example.com/coordinates'));
+    final response = await http.get(Uri.parse(
+        'https://213.238.1680.86:1603/api/generate_route?route=bilmemne'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

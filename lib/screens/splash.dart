@@ -42,19 +42,27 @@ class _SplashState extends State<Splash> {
                     100), // Sayfanın 3'te 2'lik alt kısmında olmasını sağlar
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: const [
                 Text(
-                  'metin1',
+                  'OptiRoute',
                   style: TextStyle(
                       fontSize: 24,
-                      color: Colors
-                          .white), // İstediğiniz stil özelliklerini ekleyebilirsiniz
+                      color: Colors.white,
+                      fontWeight: FontWeight
+                          .bold), // İstediğiniz stil özelliklerini ekleyebilirsiniz
                 ),
                 SizedBox(height: 20), // 20 px boşluk
                 Text(
-                  'metin2',
+                  'Kişiselleştirilmiş rotalar',
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
+                Text(
+                  'oluşturmak için geliştirilmiştir.',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                SizedBox(height: 60)
               ],
             ),
           ),
