@@ -39,16 +39,20 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>io.flutter.embedded_views_preview</key>
-<true/>
+	<true/>
 
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>We need your location for the map</string>
-<key>io.flutter.embedded_views_preview</key>
-<true/>
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>We need your location for the map</string>
-<key>io.flutter.plugins.googlemaps.ApiKey</key>
-<string>YOUR_API_KEY</string>
+	<!-- Network Access Configuration -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+
+	<!-- Location and API Key Configuration -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location for the map</string>
+	<key>io.flutter.plugins.googlemaps.ApiKey</key>
+	<string>AIzaSyB-31NpgBoKOChHIgxOCYtf1IfzsjLPxzk</string>
 
 </dict>
 </plist>
