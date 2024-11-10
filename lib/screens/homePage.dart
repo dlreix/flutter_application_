@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_arda/screens/map.dart';
+// import 'package:flutter_application_arda/screens/map.dart';
+import 'package:flutter_application_arda/screens/MapPageHome.dart';
 import 'package:flutter_application_arda/widgets/weatherWidget.dart';
 import 'getUserData.dart';
 
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   // Ekranlar listesi
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(), // Ana sayfa
-    MapPage(), // Harita sayfası
+    MapPageHome(), // Harita sayfası
   ];
 
   // BottomNavigationBar'daki öğeye tıklanınca yapılacak işlem
