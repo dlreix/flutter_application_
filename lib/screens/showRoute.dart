@@ -24,33 +24,34 @@ class _ShowRouteState extends State<ShowRoute> {
   }
 
   Future<void> fetchData() async {
-    if (widget.selectedCategories.isEmpty) {
-      print('No categories selected');
-      return;
-    }
-
-    // Select a random category
-    final randomCategory = widget.selectedCategories[Random().nextInt(widget.selectedCategories.length)];
-
-    final url = Uri.parse('http://213.238.180.86:1603/api/generate_route');
-    try {
-      final response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: json.encode({"category": randomCategory}),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          dataList = json.decode(response.body);
-        });
-      } else {
-        print('Error: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('An error occurred: $e');
-    }
+  if (widget.selectedCategories.isEmpty) {
+    print('No categories selected');
+    return;
   }
+
+  // Select a random category
+  final randomCategory = widget.selectedCategories[Random().nextInt(widget.selectedCategories.length)];
+  final url = Uri.parse('http://213.238.180.86:1603/api/generate_route');
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: json.encode({"category": randomCategory}),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        dataList = json.decode(response.body);
+      });
+    } else {
+      print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+      print('Response body: ${response.body}');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class _ShowRouteState extends State<ShowRoute> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MapPage()),
+                  MaterialPageRoute(builder: (context) => MapPage(dataList: dataList)),
                 );
               },
               style: ElevatedButton.styleFrom(
